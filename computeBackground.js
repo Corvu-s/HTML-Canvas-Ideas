@@ -4,6 +4,7 @@ canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 var c = canvas.getContext("2d"); // context, alows us to draw things
 //implemrnt some sort of slider to change the recgangle size
+//this it in another computer
 var colours = ["#d0ffb5","#c1ff9e","#90ff52","#86ff42","#74ff26","#6aff17","#5bff00"]
 function Rectangle(x,y){
     min=0;
