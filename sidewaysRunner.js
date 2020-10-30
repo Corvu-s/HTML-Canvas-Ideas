@@ -6,6 +6,9 @@ canvas.height = window.innerHeight;
 var symbols = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"]
 var rectangleWidth=10;
 
+var defaultCol=`rgba(57,255,20)`;
+var firstCharCol="rgba(255,255,255)"
+var charsPerLine=20;
 
 
 function RunnerRectangle (y,start,speed){
@@ -26,10 +29,16 @@ this.draw = function(){
         this.changeCount=0;
     }
     c.font ="20px Arial"
-    c.fillStyle=`rgba(57,255,20)`;
+    if(start == charsPerLine-1){
+        c.fillStyle=firstCharCol;
+
+    }else{
+        c.fillStyle=defaultCol;
+
+    }
     
-    c.fillText(this.symbol,this.xPos*rectangleWidth,this.yPos*50)//this constant changes the spacing of each line of "code"
-console.log(this.yPos)
+    c.fillText(this.symbol,this.xPos*rectangleWidth,this.yPos*10)//this constant changes the spacing of each line of "code"
+
 }
 
 this.update = function(){
@@ -46,10 +55,9 @@ var runnerElements=[]
 
 function init(){
     runnerElements=[]
-for(j=1;j<20;j++){
+for(j=1;j<100;j++){
     var speed=Math.random();
-    for(k=0;k<20;k++){
-        var startingPos = Math.floor((Math.random()*innerWidth)/25)
+    for(k=0;k<charsPerLine;k++){
         runnerElements.push(new RunnerRectangle(j,k,speed/5))//add a slider for te division here.
     }
    
