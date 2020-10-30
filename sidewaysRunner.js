@@ -10,19 +10,23 @@ this.xPos=start;
 this.yPos=y;
 this.speed = speed;
 this.symbol="a";
+this.changeCount=0;
 this.col=235;
 this.setSymbol = function(){
-    var i=Math.random()*symbols.length;
+    var i=Math.floor(Math.random()*symbols.length);
 this.symbol=symbols[i];
-console.log(symbols[i])
 }
 this.draw = function(){
-    c.fillStyle = `rgba(57,255,20)`;
-    c.fillRect(this.xPos*rectangleWidth, this.yPos*rectangleWidth,rectangleWidth,rectangleWidth);
+    this.changeCount++;
+    console.log(this.changeCount)
+    if(this.changeCount == 100){
+        this.setSymbol()
+        this.changeCount=0;
+    }
     c.font ="20px Arial"
-    c.fillStyle="black"
-    setInterval(this.setSymbol(),1000);
-    c.fillText(this.symbol,this.xPos*rectangleWidth,this.yPos*rectangleWidth)
+    c.fillStyle=`rgba(57,255,20)`;
+    
+    c.fillText(this.symbol,this.xPos*rectangleWidth,this.yPos*100)//this constant changes the spacing of each line of "code"
 }
 
 this.update = function(){
@@ -39,10 +43,13 @@ var runnerElements=[]
 
 function init(){
     runnerElements=[]
-for(j=0;j<innerHeight/rectangleWidth;j++){
+for(j=1;j<10;j++){
     var speed=Math.random();
-    var startingPos = Math.floor((Math.random()*innerWidth)/25)
-    runnerElements.push(new RunnerRectangle(j,startingPos,speed/5))//add a slider for te division here.
+    for(k=0;k<10;k++){
+        var startingPos = Math.floor((Math.random()*innerWidth)/25)
+        runnerElements.push(new RunnerRectangle(j,startingPos,speed/5))//add a slider for te division here.
+    }
+   
 }
 }
 
@@ -50,6 +57,8 @@ for(j=0;j<innerHeight/rectangleWidth;j++){
 function animate(){
     requestAnimationFrame(animate)
     c.clearRect(0, 0, innerWidth, innerHeight);
+    c.fillStyle="black"
+    c.fillRect(0,0,canvas.width,canvas.height)//blak background
     for(i=0;i<runnerElements.length;i++){
         runnerElements[i].update();
     }
