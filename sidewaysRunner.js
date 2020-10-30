@@ -3,15 +3,16 @@ var c=canvas.getContext("2d")
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
+
 var symbols = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"]
 var rectangleWidth=10;
 
 var defaultCol=`rgba(57,255,20)`;
-var firstCharCol="rgba(255,255,255)"
-var charsPerLine=20;
+var firstCharCol={red:255,green:255,blue:255}
+var charsPerLine=30;
+var lineHeight=20;
 
-
-function RunnerRectangle (y,start,speed){
+function RunnerRectangle (y,start,speed,symbolChangeSpeed){
 this.xPos=start;
 this.yPos=y;
 this.speed = speed;
@@ -24,21 +25,22 @@ this.symbol=symbols[i];
 }
 this.draw = function(){
     this.changeCount++;
-    if(this.changeCount == 100){
+    if(this.changeCount == symbolChangeSpeed){
         this.setSymbol()
         this.changeCount=0;
     }
     c.font ="20px Arial"
-    if(start == charsPerLine-1){
-        c.fillStyle=firstCharCol;
-
+    if(start > charsPerLine-4){//these n-1 symbols will have a fading white colour
+        
+        c.fillStyle=`rgba(${firstCharCol.red-((charsPerLine-start)*30)},${firstCharCol.green-((charsPerLine-start)*20)},${firstCharCol.blue-((charsPerLine-start)*20)})`;
     }else{
         c.fillStyle=defaultCol;
 
     }
     
-    c.fillText(this.symbol,this.xPos*rectangleWidth,this.yPos*10)//this constant changes the spacing of each line of "code"
-
+    c.fillText(this.symbol,this.xPos*rectangleWidth,this.yPos*lineHeight)//this constant changes the spacing of each line of "code"
+    c.shadowColor = `rgba(57,255,20)`;
+    c.shadowBlur = 25;
 }
 
 this.update = function(){
@@ -55,13 +57,15 @@ var runnerElements=[]
 
 function init(){
     runnerElements=[]
-for(j=1;j<100;j++){
+for(j=1;j<innerHeight/lineHeight;j++){
     var speed=Math.random();
     for(k=0;k<charsPerLine;k++){
-        runnerElements.push(new RunnerRectangle(j,k,speed/5))//add a slider for te division here.
+        var symbolChange = Math.floor(Math.random()*150)
+        runnerElements.push(new RunnerRectangle(j,k,speed/5,symbolChange))//add a slider for te division here.
     }
    
 }
+console.log(runnerElements.length)
 }
 
 
