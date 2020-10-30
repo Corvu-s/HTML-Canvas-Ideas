@@ -4,7 +4,10 @@ canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
 var symbols = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"]
-var rectangleWidth=25;
+var rectangleWidth=10;
+
+
+
 function RunnerRectangle (y,start,speed){
 this.xPos=start;
 this.yPos=y;
@@ -18,7 +21,6 @@ this.symbol=symbols[i];
 }
 this.draw = function(){
     this.changeCount++;
-    console.log(this.changeCount)
     if(this.changeCount == 100){
         this.setSymbol()
         this.changeCount=0;
@@ -26,7 +28,8 @@ this.draw = function(){
     c.font ="20px Arial"
     c.fillStyle=`rgba(57,255,20)`;
     
-    c.fillText(this.symbol,this.xPos*rectangleWidth,this.yPos*100)//this constant changes the spacing of each line of "code"
+    c.fillText(this.symbol,this.xPos*rectangleWidth,this.yPos*50)//this constant changes the spacing of each line of "code"
+console.log(this.yPos)
 }
 
 this.update = function(){
@@ -43,11 +46,11 @@ var runnerElements=[]
 
 function init(){
     runnerElements=[]
-for(j=1;j<10;j++){
+for(j=1;j<20;j++){
     var speed=Math.random();
-    for(k=0;k<10;k++){
+    for(k=0;k<20;k++){
         var startingPos = Math.floor((Math.random()*innerWidth)/25)
-        runnerElements.push(new RunnerRectangle(j,startingPos,speed/5))//add a slider for te division here.
+        runnerElements.push(new RunnerRectangle(j,k,speed/5))//add a slider for te division here.
     }
    
 }
