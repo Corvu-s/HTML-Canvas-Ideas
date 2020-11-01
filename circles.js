@@ -50,8 +50,8 @@ var circleArray=[]
 function init(){
     circleArray=[];
     
-    for(i=r;i<innerWidth;i=i+50){
-        for(j=r;j<innerHeight;j=j+50){
+    for(i=r;i<200;i=i+50){
+        for(j=r;j<200;j=j+50){
             var colChoice =Math.floor(Math.random()*5)
             var maxRad=Math.floor(Math.random()*(100-50)+50)
             console.log(colChoice)
