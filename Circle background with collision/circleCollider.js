@@ -36,11 +36,11 @@ this.draw= function(){
     c.closePath()
 }
 this.update = function(){
-    if(this === c2){
+    
         if(distance(mouse.x,this.xPos,mouse.y,this.yPos) < 130 ){
             console.log("collide")
         }
-    }
+   
     
     this.draw()
 }
