@@ -23,11 +23,12 @@ window.addEventListener("mousemove",(e)=>{
 
 
 
-function Circle(x,y,rad){
+function Circle(x,y,rad,sx,sy){
 this.xPos=x;
 this.yPos=y;
 this.r=rad;
-
+this.dx=sx;
+this.dy=sy;
 this.draw= function(){
     c.beginPath();
     c.arc(this.xPos, this.yPos, this.r, 0, Math.PI * 2, false);
@@ -35,32 +36,40 @@ this.draw= function(){
     c.fill()
     c.closePath()
 }
-this.update = function(){
+this.update = function(props){
     
-        if(distance(mouse.x,this.xPos,mouse.y,this.yPos) < 130 ){
-            console.log("collide")
+        for(k=0;k<props.length;k++){
+            if(distance(props[k],this.xPos,props[k],this.yPos)+this.r*2 < 2*this.r ){
+                 console.log("collide")
+             }else{
+                // console.log("not")
+             }
+            // console.log(distance(props[k],this.xPos,props[k],this.yPos))
         }
+       
+        if (this.xPos + this.r > innerWidth || this.xPos - this.r < 0) {
+            this.dx = -this.dx;
+          }
+          if (this.yPos + this.r > innerHeight || this.yPos - this.r < 0) {
+            this.dy = -this.dy;
+          }
    
-    
+    this.xPos=this.xPos+this.dx;
+    this.yPos=this.yPos+this.dy;
+
     this.draw()
 }
 
 }
 var circleArray=[]
-var c1;
-var c2;
+
 function init(){
     circleArray=[];
-    c1=new Circle(500,500,100);
-    c2=new Circle(20,20,30)
-    // for(i=r;i<200;i=i+50){
-    //     for(j=r;j<200;j=j+50){
-    //         var colChoice =Math.floor(Math.random()*5)
-    //         var maxRad=Math.floor(Math.random()*(100-50)+50)
-    //         console.log(colChoice)
-    //         circleArray.push(new Circle(i,j,colChoice,maxRad) )
-    //     }
-    // }
+    
+    for(i=0;i<5;i++){
+        var r =Math.random()*1000;
+        circleArray.push(new Circle(r,100*(i+1),40,4,4))
+    }
   
 }
 
@@ -68,14 +77,11 @@ function animate(){
     requestAnimationFrame(animate);
     c.clearRect(0, 0, innerWidth, innerHeight);
     c.fillStyle="black" 
-    c1.update()
-    c2.update()
-    c2.xPos=mouse.x
-    c2.yPos=mouse.y
+    for(j=0;j<circleArray.length;j++){
+        circleArray[j].update(circleArray)
+    }
    
-    // for(k=0;k<circleArray.length;k++){
-    //     circleArray[k].update()
-    // }
+ 
     
 
 }
