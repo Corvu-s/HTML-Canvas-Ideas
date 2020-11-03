@@ -21,17 +21,102 @@ window.addEventListener("mousemove",(e)=>{
     return Math.sqrt((Math.pow(x,2)+Math.pow(y,2)))
   }
 
+//colliison physics https://gist.github.com/christopher4lis/f9ccb589ee8ecf751481f05a8e59b1dc
+
+
+
+/**
+ * Rotates coordinate system for velocities
+ *
+ * Takes velocities and alters them as if the coordinate system they're on was rotated
+ *
+ * @param  Object | velocity | The velocity of an individual particle
+ * @param  Float  | angle    | The angle of collision between two objects in radians
+ * @return Object | The altered x and y velocities after the coordinate system has been rotated
+ */
+
+function rotate(velocity, angle) {
+    const rotatedVelocities = {
+        x: velocity.x * Math.cos(angle) - velocity.y * Math.sin(angle),
+        y: velocity.x * Math.sin(angle) + velocity.y * Math.cos(angle)
+    };
+
+    return rotatedVelocities;
+}
+
+/**
+ * Swaps out two colliding particles' x and y velocities after running through
+ * an elastic collision reaction equation
+ *
+ * @param  Object | particle      | A particle object with x and y coordinates, plus velocity
+ * @param  Object | otherParticle | A particle object with x and y coordinates, plus velocity
+ * @return Null | Does not return a value
+ */
+
+function resolveCollision(particle, otherParticle) {
+    const xVelocityDiff = particle.velocity.x - otherParticle.velocity.x;
+    const yVelocityDiff = particle.velocity.y - otherParticle.velocity.y;
+
+    const xDist = otherParticle.x - particle.x;
+    const yDist = otherParticle.y - particle.y;
+
+    // Prevent accidental overlap of particles
+    if (xVelocityDiff * xDist + yVelocityDiff * yDist >= 0) {
+
+        // Grab angle between the two colliding particles
+        const angle = -Math.atan2(otherParticle.y - particle.y, otherParticle.x - particle.x);
+
+        // Store mass in var for better readability in collision equation
+        const m1 = particle.mass;
+        const m2 = otherParticle.mass;
+
+        // Velocity before equation
+        const u1 = rotate(particle.velocity, angle);
+        const u2 = rotate(otherParticle.velocity, angle);
+
+        // Velocity after 1d collision equation
+        const v1 = { x: u1.x * (m1 - m2) / (m1 + m2) + u2.x * 2 * m2 / (m1 + m2), y: u1.y };
+        const v2 = { x: u2.x * (m1 - m2) / (m1 + m2) + u1.x * 2 * m2 / (m1 + m2), y: u2.y };
+
+        // Final velocity after rotating axis back to original location
+        const vFinal1 = rotate(v1, -angle);
+        const vFinal2 = rotate(v2, -angle);
+
+        // Swap particle velocities for realistic bounce effect
+        particle.velocity.x = vFinal1.x;
+        particle.velocity.y = vFinal1.y;
+
+        otherParticle.velocity.x = vFinal2.x;
+        otherParticle.velocity.y = vFinal2.y;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 function Circle(x,y,rad,sx,sy){
-this.xPos=x;
-this.yPos=y;
+this.x=x;
+this.y=y;
 this.r=rad;
-this.dx=sx;
-this.dy=sy;
+this.mass=1;
+this.velocity={
+    x:sx,y:sy
+}
+
 this.draw= function(){
     c.beginPath();
-    c.arc(this.xPos, this.yPos, this.r, 0, Math.PI * 2, false);
+    c.arc(this.x, this.y, this.r, 0, Math.PI * 2, false);
     c.fillStyle= "red"
     c.fill()
     c.closePath()
@@ -40,27 +125,23 @@ this.update = function(props){
     
         for(k=0;k<props.length;k++){
             if(this === props[k]) continue;
-            if(distance(props[k].xPos,this.xPos,props[k].yPos,this.yPos)-this.r*2 < 0 ){
-                 console.log("collide")
-                 props[k].xPos=-props[k].xPos
-                 this.xPos=-this.xPos
-                 props[k].yPos=-  props[k].yPos;
-                 this.yPos=-this.yPos
+            if(distance(props[k].x,this.x,props[k].y,this.y)-this.r*2 < 0 ){
+               resolveCollision(this,props[k])
              }else{
                 // console.log("not")
              }
-            // console.log(distance(props[k],this.xPos,props[k],this.yPos))
+            // console.log(distance(props[k],this.x,props[k],this.y))
         }
        
-        if (this.xPos + this.r > innerWidth || this.xPos - this.r < 0) {
-            this.dx = -this.dx;
+        if (this.x + this.r > innerWidth || this.x - this.r <= 0) {
+            this.velocity.x = -this.velocity.x;
           }
-          if (this.yPos + this.r > innerHeight || this.yPos - this.r < 0) {
-            this.dy = -this.dy;
+          if (this.y + this.r > innerHeight || this.y - this.r <= 0) {
+            this.velocity.y = -this.velocity.y;
           }
    
-    this.xPos=this.xPos+this.dx;
-    this.yPos=this.yPos+this.dy;
+    this.x=this.x+this.velocity.x;
+    this.y=this.y+this.velocity.y;
 
     this.draw()
 }
@@ -71,7 +152,7 @@ var circleArray=[]
 function init(){
     circleArray=[];
     
-    for(i=0;i<5;i++){
+    for(i=0;i<10;i++){
         var r =Math.random()*1000;
         circleArray.push(new Circle(r,100*(i+1),40,4,4))
     }
