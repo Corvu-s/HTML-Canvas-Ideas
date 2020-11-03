@@ -39,8 +39,13 @@ this.draw= function(){
 this.update = function(props){
     
         for(k=0;k<props.length;k++){
-            if(distance(props[k],this.xPos,props[k],this.yPos)+this.r*2 < 2*this.r ){
+            if(this === props[k]) continue;
+            if(distance(props[k].xPos,this.xPos,props[k].yPos,this.yPos)-this.r*2 < 0 ){
                  console.log("collide")
+                 props[k].xPos=-props[k].xPos
+                 this.xPos=-this.xPos
+                 props[k].yPos=-  props[k].yPos;
+                 this.yPos=-this.yPos
              }else{
                 // console.log("not")
              }
