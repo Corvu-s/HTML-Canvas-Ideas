@@ -110,6 +110,8 @@ this.x=x;
 this.y=y;
 this.r=rad;
 this.mass=1;
+this.maxr=100;
+this.minr=25;
 this.velocity={
     x:sx,y:sy
 }
@@ -117,15 +119,30 @@ this.velocity={
 this.draw= function(){
     c.beginPath();
     c.arc(this.x, this.y, this.r, 0, Math.PI * 2, false);
-    c.fillStyle= "red"
-    c.fill()
+    c.strokeStyle= "red"
+    c.stroke()
     c.closePath()
 }
 this.update = function(props){
+
+    
+    if(mouse.x - this.x <50 && mouse.y-this.y <50 && mouse.x-this.x >-50 && mouse.y-this.y > -50){
+        
+
+        if(this.r<this.maxr){
+          this.r +=3;
+          
+        }
+      }else if(this.r > this.minr){
+   
+
+        this.r -=3;
+      }
     
         for(k=0;k<props.length;k++){
             if(this === props[k]) continue;
             if(distance(props[k].x,this.x,props[k].y,this.y)-this.r*2 < 0 ){
+                
                resolveCollision(this,props[k])
              }else{
                 // console.log("not")
@@ -152,9 +169,12 @@ var circleArray=[]
 function init(){
     circleArray=[];
     
-    for(i=0;i<10;i++){
-        var r =Math.random()*1000;
-        circleArray.push(new Circle(r,100*(i+1),40,4,4))
+    for(i=25;i<1000;i=i+50){
+        for(j=25;j<1000;j=j+50){
+            circleArray.push(new Circle(i,j,25,1,1))
+        }
+       // var r =Math.random()*1000;
+       // circleArray.push(new Circle(r,100*(i+1),40,0,0))
     }
   
 }
