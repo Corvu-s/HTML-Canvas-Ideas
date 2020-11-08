@@ -3,7 +3,9 @@ var canvas = document.querySelector("canvas")
 var c=canvas.getContext("2d")
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
-function Square(x,y,id){
+
+var colours={black:"black",red:"red"}
+function Square(x,y,id,speed){
     this.id=id
     this.dir=speed;
     this.maxLength=40;
@@ -16,7 +18,14 @@ function Square(x,y,id){
     this.x=x;
     this.y=y;
     this.draw = function(){
-        c.fillStyle="black"
+        var col;
+        if(this.id %2 == 0){
+            col=colours.black
+        }else{
+            col=colours.red
+        }
+        
+        c.fillStyle=col
         c.fillRect(x,y,this.length,this.width)
     }
     this.update = function(){
@@ -43,8 +52,9 @@ squares=[]
 var id=0;
 for(i=0;i<innerWidth;i=i+80){
     for(j=0;j<innerHeight;j=j+80){
-
-        squares.push(new Square (i,j,))
+        var s = Math.random()*0.5;
+        squares.push(new Square (i,j,id,s))
+        id++;
     }
 }
 }
