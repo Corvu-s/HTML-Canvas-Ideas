@@ -3,20 +3,23 @@ var c=canvas.getContext("2d")
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
+//𐌁	𐌂	𐌃	𐌄	𐌅	𐌆	𐌇	𐌈	𐌉	𐌊	𐌋	𐌌	𐌍	𐌎	𐌏	𐌐	𐌑	𐌒	𐌓	𐌔	𐌕	𐌖	𐌗	𐌘	𐌙	𐌚
+//var symbols = ["𐌀","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"]
+var symbols=["𐌁","𐌂","𐌃","𐌄","𐌅","𐌆","𐌇","𐌈","𐌉","𐌊","𐌋","𐌌","𐌍","𐌎","𐌏","𐌐","𐌑","𐌒","𐌓","𐌔","𐌕","𐌖","𐌗","𐌘","𐌙","𐌚"];
 
-var symbols = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"]
-var rectangleWidth=10;
+var rectangleWidth=20;
+
 
 var defaultCol=`rgba(57,255,20)`;
 var firstCharCol={red:255,green:255,blue:255}
 var charsPerLine=30;
 var lineHeight=20;
 
-function RunnerRectangle (y,start,speed,symbolChangeSpeed){
-this.xPos=start;
+function RunnerRectangle (x,y,speed,symbolChangeSpeed){
+this.xPos=x;
 this.yPos=y;
 this.speed = speed;
-this.symbol="a";
+this.symbol=symbols[Math.floor(Math.random()*symbols.length)];
 this.changeCount=0;
 this.col=235;
 this.setSymbol = function(){
@@ -30,23 +33,23 @@ this.draw = function(){
         this.changeCount=0;
     }
     c.font ="20px Arial"
-    if(start > charsPerLine-4){//these n-1 symbols will have a fading white colour
+    // if(this.yPos > charsPerLine-4){//these n-1 symbols will have a fading white colour
         
-        c.fillStyle=`rgba(${firstCharCol.red-((charsPerLine-start)*30)},${firstCharCol.green-((charsPerLine-start)*20)},${firstCharCol.blue-((charsPerLine-start)*20)})`;
-    }else{
-        c.fillStyle=defaultCol;
+    //     c.fillStyle=`rgba(${firstCharCol.red-((charsPerLine-this.yPos)*30)},${firstCharCol.green-((charsPerLine-this.yPos)*20)},${firstCharCol.blue-((charsPerLine-start)*20)})`;
+    // }else{
 
-    }
+    // }
+    c.fillStyle=defaultCol;
     
-    c.fillText(this.symbol,this.xPos*rectangleWidth,this.yPos*lineHeight)//this constant changes the spacing of each line of "code"
+    c.fillText(this.symbol,this.xPos,this.yPos*12)//this constant changes the spacing of each line of "code"
     c.shadowColor = `rgba(57,255,20)`;
     c.shadowBlur = 25;
 }
 
 this.update = function(){
-    this.xPos=this.xPos+this.speed
-    if(this.xPos > (innerWidth/rectangleWidth)){//divide by the width of the rectngle
-        this.xPos=0;   
+    this.yPos=this.yPos+this.speed
+    if(this.yPos > (innerHeight/10)){//divide by the width of the rectngle
+        this.yPos=0;   
     }
     this.draw()
 }
@@ -57,15 +60,15 @@ var runnerElements=[]
 
 function init(){
     runnerElements=[]
-for(j=1;j<innerHeight/lineHeight;j++){
-    var speed=Math.random();
+for(j=1;j<innerWidth;j=j+30){
+    var speed=Math.random()*1.2;
     for(k=0;k<charsPerLine;k++){
-        var symbolChange = Math.floor(Math.random()*150)
+        var symbolChange = Math.floor(Math.random()*900)
         runnerElements.push(new RunnerRectangle(j,k,speed/5,symbolChange))//add a slider for te division here.
     }
    
 }
-console.log(runnerElements.length)
+console.log(runnerElements)
 }
 
 
