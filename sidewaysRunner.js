@@ -15,7 +15,8 @@ var firstCharCol={red:255,green:255,blue:255}
 var charsPerLine=30;
 var lineHeight=20;
 
-function RunnerRectangle (x,y,speed,symbolChangeSpeed){
+function RunnerRectangle (x,y,speed,symbolChangeSpeed,id){
+    this.id=id;
 this.xPos=x;
 this.yPos=y;
 this.speed = speed;
@@ -33,14 +34,9 @@ this.draw = function(){
         this.changeCount=0;
     }
     c.font ="20px Arial"
-    // if(this.yPos > charsPerLine-4){//these n-1 symbols will have a fading white colour
-        
-    //     c.fillStyle=`rgba(${firstCharCol.red-((charsPerLine-this.yPos)*30)},${firstCharCol.green-((charsPerLine-this.yPos)*20)},${firstCharCol.blue-((charsPerLine-start)*20)})`;
-    // }else{
-
-    // }
+  
     c.fillStyle=defaultCol;
-    
+
     c.fillText(this.symbol,this.xPos,this.yPos*12)//this constant changes the spacing of each line of "code"
     c.shadowColor = `rgba(57,255,20)`;
     c.shadowBlur = 25;
@@ -60,11 +56,13 @@ var runnerElements=[]
 
 function init(){
     runnerElements=[]
+    var count=0;
 for(j=1;j<innerWidth;j=j+30){
     var speed=Math.random()*1.2;
     for(k=0;k<charsPerLine;k++){
         var symbolChange = Math.floor(Math.random()*900)
-        runnerElements.push(new RunnerRectangle(j,k,speed/5,symbolChange))//add a slider for te division here.
+        runnerElements.push(new RunnerRectangle(j,k,speed/5,symbolChange,count))//add a slider for te division here.
+        count++;
     }
    
 }
