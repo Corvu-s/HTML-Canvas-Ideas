@@ -15,82 +15,96 @@ mouse={
 }
 // var width=200;
 // var height=323.607;
-function GoldenRect(x,y){
-    this.freeX=x
-    this.freeY=y
-    this.originX=200;
-    this.originY=323.607;
 
-    this.width=this.originX
-    this.height=this.originY
-this.x=x-this.width/2;
-this.y=y-this.height/2;
-this.draw = function(){
 
-   // c.rect(this.x-this.width/2,this.y-this.height/2,this.width,this.height)
-   c.rect(this.freeX,this.freeY,10,10)
-   c.stroke()
-//    c.rect(this.x,this.y,this.width, this.height)
-//     c.stroke()
-//     c.strokeStyle="black"
-//     //console.log(this.x,this.y)
-}
+function Rectangle(length,width){
+    this.length=length;
+    this.width=width;
+    this.origionalLength=length;
+    this.origionalWidth=width
+    this.originX=(innerWidth/2)-(length/2);
+    this.originY=(innerHeight/2)-(width/2);
+    this.x=this.originX;
+    this.y=this.originY
+   
+    this.draw=function(){
 
-this.update = function(){
-    this.freeX=mouse.x
-    this.freeY=mouse.y
-
-//     this.x=this.x-4;
-//     this.y=this.y-4;
-//     this.width=this.width+8;
-//     this.height=this.height+8;
-
-//     if(this.y < 0){
-//         this.width=this.originX
-//         this.height=this.originY
-//         this.x=innerWidth/2-this.width/2
-//         this.y=innerHeight/2-this.height/2
-//     }
-  this.draw()
-
-}
-}
-
-var rectangles=[];
-function init(){
-    for(i=0;i<1;i++){
-        rectangles.push(new GoldenRect(innerWidth/2,innerHeight/2))
+        c.strokeRect(this.x,this.y,this.length,this.width)
+        c.strokeStyle="white"
     }
 
+    this.update=function(){
+        this.x=this.x-1;
+        this.y=this.y-1;
+        this.length=this.length+2;
+        this.width=this.width+2;
+
+        if(this.y < 0){
+            this.x=this.originX
+            this.y=this.originY
+            this.length=0
+            this.width=0
+        }
+
+     this.draw() 
+    }
 }
+
+
+
+var path=[]
+function init(){
+    path=[]
+    for(i=1;i<300;i=i+100){
+        path.push(new Rectangle(i,2*i))
+    }
+    console.log(path)
+}
+
 
 function animate(){
 requestAnimationFrame(animate)
+c.clearRect(0,0,innerWidth,innerHeight)
 
-   c.clearRect(0,0, window.innerWidth,window.innerHeight)
+c.fillStyle="black"
+c.fillRect(0,0,innerWidth,innerHeight)
 
-        // c.fillStyle="black"
-        //         c.fillRect(0,0,innerWidth,innerHeight)
-
-    for(k=0;k<rectangles.length;k++){
-        rectangles[k].update()
-    }
-
+ for(k=0;k<path.length;k++){
+     path[k].update()
+ }
 }
 
-init();
+init()
 animate()
 
 
 
+// function Test(x,y){
+
+//     this.r=10;
+//     this.x=x;
+//     this.y=y
+//     this.draw =function(){
+// c.strokeRect(this.x, this.y,10,10)      
+//     }
+//     this.update =function(){
+//         this.x=mouse.x
+//         this.y=mouse.y
+//         this.draw()
+//     }
+// }
+
+// var thing = new Test()
+
+// function animate(){
+//     requestAnimationFrame(animate)
+//     c.clearRect(0, 0, innerWidth, innerHeight);
+// thing.update()
+// }
 
 
 
-
-
-
-
-
+// animate()
 
 
 
