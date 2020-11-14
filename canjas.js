@@ -102,6 +102,8 @@ function Circle(x, y, dx, dy, r) {
     }
 
   this.draw = function () {
+    c.rect(mouse.x,mouse.y,10,10)
+    c.stroke()
     c.beginPath();
     c.arc(this.x, this.y, this.r, 0, Math.PI * 2, false);
     c.fillStyle= this.col;
