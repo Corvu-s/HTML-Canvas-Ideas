@@ -17,13 +17,12 @@ mouse={
 // var height=323.607;
 
 
-function Rectangle(length,width){
+function Rectangle(length,width,id){
+    this.id=id;
     this.length=length;
     this.width=width;
-    this.origionalLength=length;
-    this.origionalWidth=width
-    this.originX=(innerWidth/2)-(length/2);
-    this.originY=(innerHeight/2)-(width/2);
+
+
     this.x=this.originX;
     this.y=this.originY
    
@@ -34,16 +33,20 @@ function Rectangle(length,width){
     }
 
     this.update=function(){
-        this.x=this.x-1;
-        this.y=this.y-1;
-        this.length=this.length+2;
-        this.width=this.width+2;
+        this.x=this.x-2;
+        this.y=this.y-2;
+        this.length=this.length+4;
+        this.width=this.width+4;
 
-        if(this.y < 0){
-            this.x=this.originX
-            this.y=this.originY
-            this.length=0
-            this.width=0
+        if(this.y < 0 || this.width > innerHeight){
+           
+            // this.x=innerWidth/2
+            // this.y=innerHeight/2
+                 
+            this.x=mouse.x
+            this.y=mouse.y
+            this.length=2
+            this.width=2
         }
 
      this.draw() 
@@ -55,8 +58,11 @@ function Rectangle(length,width){
 var path=[]
 function init(){
     path=[]
-    for(i=1;i<300;i=i+100){
-        path.push(new Rectangle(i,2*i))
+    var id=0;
+    for(i=1;i<innerHeight;i=i+300){
+        
+        path.push(new Rectangle(i,i,id))
+        id++;
     }
     console.log(path)
 }
