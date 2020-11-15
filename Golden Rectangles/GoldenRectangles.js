@@ -1,9 +1,14 @@
 var canvas = document.querySelector("canvas");
-
-
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 var c = canvas.getContext("2d"); // context, alows us to draw things
+
+function button(){
+    mode=!mode
+}
+
+var mode=false;
+
 
 window.addEventListener("mousemove",(e)=>{
     mouse.x=e.x;
@@ -18,13 +23,19 @@ mouse={
 
 
 function Rectangle(length,width,id){
+    this.animationCount=0;
+
+    this.startX=0;
+    this.startY=innerHeight/2;
+    this.maxWidth=300;
+    this.mayLength=300;
     this.id=id;
     this.length=length;
     this.width=width;
 
 
-    this.x=this.originX;
-    this.y=this.originY
+    this.x=innerWidth/2-this.width/2;
+    this.y=innerHeight/2-this.length/2
    
     this.draw=function(){
 
@@ -33,20 +44,70 @@ function Rectangle(length,width,id){
     }
 
     this.update=function(){
+        if(this.animationCount == 0){
+            this.startX=this.startX+10
+
+        }
+        else if(this.animationCount == 1){
+            this.startY=this.startY+10;
+        }
+        else if(this.animationCount == 2){
+            this.startX=this.startX +10;
+            this.startY=this.startY -10;
+        }else if(this.animationCount  == 3){
+            this.startX=this.startX+10;
+            this.startY=this.startY+10;
+        }
+
+        if(this.startX > innerWidth && this.animationCount == 0){
+            this.animationCount++
+            this.startX=innerWidth/2
+            this.startY=0;
+        }   
+        else if(this.startY > innerHeight && this.animationCount == 1){
+            this.animationCount++
+            this.startX=0
+            this.startY=innerHeight
+        }
+        else if(this.startX> innerWidth || this.startY<0 && this.animationCount == 2){
+            this.animationCount++;
+            this.startX=innerWidth/2
+            this.startY=0;
+            
+        }
+        else if(this.startX > innerWidth || this.startY > innerHeight && this.animationCount == 3){
+            this.animationCount++;
+
+            this.startX=0
+            this.startY=innerHeight/2;
+        }
+
+        if(this.animationCount > 3){
+            this.animationCount =0;
+        }
+
+
         this.x=this.x-2;
         this.y=this.y-2;
         this.length=this.length+4;
         this.width=this.width+4;
 
-        if(this.y < 0 || this.width > innerHeight){
+        if(this.width >= this.maxWidth || this.length > this.mayLength){
            
-            // this.x=innerWidth/2
-            // this.y=innerHeight/2
-                 
+          if(mode){
             this.x=mouse.x
-            this.y=mouse.y
+              this.y=mouse.y
+          }else{
+            this.x=this.startX
+            this.y=this.startY
+          }
+           
+               
+           
+ 
             this.length=2
             this.width=2
+           
         }
 
      this.draw() 
@@ -57,14 +118,15 @@ function Rectangle(length,width,id){
 
 var path=[]
 function init(){
+ 
     path=[]
     var id=0;
-    for(i=1;i<innerHeight;i=i+300){
+    for(i=0;i<innerHeight;i=i+1){
         
         path.push(new Rectangle(i,i,id))
         id++;
     }
-    console.log(path)
+    
 }
 
 
